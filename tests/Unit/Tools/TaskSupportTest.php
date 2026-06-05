@@ -7,7 +7,8 @@ use Laravel\Mcp\Server\Attributes\TaskSupport as TaskSupportAttribute;
 use Laravel\Mcp\Server\Tool;
 
 it('omits execution key when no TaskSupport attribute is declared', function (): void {
-    $tool = new class extends Tool {
+    $tool = new class extends Tool
+    {
         public function handle(Request $request): Response
         {
             return Response::text('test');
@@ -18,7 +19,8 @@ it('omits execution key when no TaskSupport attribute is declared', function ():
 });
 
 it('includes execution key with taskSupport when attribute is declared as Optional', function (): void {
-    $tool = new #[TaskSupportAttribute(TaskSupport::Optional)] class extends Tool {
+    $tool = new #[TaskSupportAttribute(TaskSupport::Optional)] class extends Tool
+    {
         public function handle(Request $request): Response
         {
             return Response::text('test');
@@ -29,7 +31,8 @@ it('includes execution key with taskSupport when attribute is declared as Option
 });
 
 it('includes execution key with taskSupport when attribute is declared as Required', function (): void {
-    $tool = new #[TaskSupportAttribute(TaskSupport::Required)] class extends Tool {
+    $tool = new #[TaskSupportAttribute(TaskSupport::Required)] class extends Tool
+    {
         public function handle(Request $request): Response
         {
             return Response::text('test');
@@ -40,7 +43,8 @@ it('includes execution key with taskSupport when attribute is declared as Requir
 });
 
 it('includes execution key with taskSupport when attribute is declared as Forbidden', function (): void {
-    $tool = new #[TaskSupportAttribute(TaskSupport::Forbidden)] class extends Tool {
+    $tool = new #[TaskSupportAttribute(TaskSupport::Forbidden)] class extends Tool
+    {
         public function handle(Request $request): Response
         {
             return Response::text('test');
@@ -51,7 +55,8 @@ it('includes execution key with taskSupport when attribute is declared as Forbid
 });
 
 it('uses Forbidden as the default taskSupport value when no value is provided', function (): void {
-    $tool = new #[TaskSupportAttribute] class extends Tool {
+    $tool = new #[TaskSupportAttribute] class extends Tool
+    {
         public function handle(Request $request): Response
         {
             return Response::text('test');
