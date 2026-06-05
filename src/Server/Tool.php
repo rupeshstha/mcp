@@ -8,6 +8,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\JsonSchema\JsonSchema as JsonSchemaFactory;
 use Laravel\Mcp\Server\Attributes\RendersApp;
+use Laravel\Mcp\Server\Attributes\TaskSupport as TaskSupportAttribute;
 use Laravel\Mcp\Server\Concerns\HasAnnotations;
 use Laravel\Mcp\Server\Tools\Annotations\ToolAnnotation;
 use Laravel\Mcp\Server\Ui\Enums\Visibility;
@@ -25,8 +26,6 @@ abstract class Tool extends Primitive
     }
 
     /**
-     * Define the output schema for this tool's results.
-     *
      * @return array<string, mixed>
      */
     public function outputSchema(JsonSchema $schema): array
@@ -34,9 +33,6 @@ abstract class Tool extends Primitive
         return [];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
     public function toMethodCall(): array
     {
         return ['name' => $this->name()];
@@ -52,6 +48,7 @@ abstract class Tool extends Primitive
      *     inputSchema?: array<string, mixed>,
      *     outputSchema?: array<string, mixed>,
      *     annotations?: array<string, mixed>|object,
+     *     execution?: array<string, mixed>,
      *     _meta?: array<string, mixed>
      * }
      */
@@ -79,6 +76,12 @@ abstract class Tool extends Primitive
 
         if (isset($outputSchema['properties'])) {
             $result['outputSchema'] = $outputSchema;
+        }
+
+        $taskSupport = $this->resolveAttribute(TaskSupportAttribute::class);
+
+        if ($taskSupport !== null) {
+            $result['execution'] = ['taskSupport' => $taskSupport->value->value];
         }
 
         $rendersApp = $this->resolveAttribute(RendersApp::class);
